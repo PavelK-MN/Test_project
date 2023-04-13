@@ -1,0 +1,15 @@
+Host <insert public ip>
+  User ubuntu
+  IdentityFile ~/.ssh/<private_key_name>
+  IdentitiesOnly yes
+
+Host 192.168.6.5
+  User ubuntu
+  IdentityFile ~/.ssh/<private_key_name>
+  IdentitiesOnly yes
+
+Host 192.168.7.5
+  User ubuntu
+  IdentityFile ~/.ssh/<private_key_name>
+  IdentitiesOnly yes
+
