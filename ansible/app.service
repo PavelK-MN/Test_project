@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve app.py
+After=network.target
+
+[Service]
+User=ubuntu
+Group=www-data
+WorkingDirectory=/home/ubuntu/
+Environment="PATH=/home/ubuntu/app.py"
+ExecStart=/bin/gunicorn --workers 3 --bind 192.168.6.5:5000 -m 007 app:app
+
+[Install]
+WantedBy=multi-user.target

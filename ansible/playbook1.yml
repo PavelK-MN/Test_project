@@ -1,0 +1,142 @@
+
+---
+- name: Copy files and install nginx on public_web
+  hosts: public_web
+  become: yes
+
+  tasks:
+  - name: copy file
+    copy:
+      src: ~/.ssh/config
+      dest: /home/ubuntu/.ssh/
+
+  - name: copy file
+    copy:
+      src: ~/.ssh/<private_key_name>
+      dest: /home/ubuntu/.ssh
+
+  - name: update repository cache
+    apt:
+      update_cache: yes
+
+  - name: install nginx
+    apt:
+      name: nginx
+
+  - name: allow reverse proxy
+    copy:
+      src: ~/ansible/redirect_site
+      dest: /etc/nginx/sites-available/
+
+  - name: Change the working directory to somedir/ before executing the command
+    shell: ln -s /etc/nginx/sites-available/redirect_site /etc/nginx/sites-enabled/
+    args:
+      chdir: /etc/nginx/sites-available/
+
+  - name: Restart service nginx
+    service:
+      name: nginx
+      state: restarted
+
+
+
+- name: install postgresql on db
+  hosts: db
+  become: yes
+
+  tasks:
+  - name: update repository cache
+    apt:
+      update_cache: yes
+
+  - name: install postgresql
+    apt:
+      name: postgresql
+
+  - name: Remove file pg_hba.conf
+    file:
+      path: /etc/postgresql/14/main/pg_hba.conf
+      state: absent
+
+  - name: Remove file postgresql.conf
+    file:
+      path: /etc/postgresql/14/main/postgresql.conf
+      state: absent
+
+  - name: copy postgresql.conf
+    copy:
+      src: ~/ansible/postgresql.conf
+      dest: /etc/postgresql/14/main/
+
+  - name: copy pg_hba.conf
+    copy:
+      src: ~/ansible/pg_hba.conf
+      dest: /etc/postgresql/14/main/pg_hba.conf
+
+  - name: executing the command run gunicorn
+    shell: sudo -u postgres psql template1 -c 'create database flask_db;'
+    args:
+      chdir: /home/ubuntu/
+
+  - name: Restart service postgresql
+    service:
+      name: postgresql
+      state: restarted
+
+
+
+- name: private_web
+  hosts: private_web
+  become: yes
+
+  tasks:
+  - name: update repository cache
+    apt:
+      update_cache: yes
+
+  - name: intall pip3
+    apt:
+      name: python3-pip
+
+  - name: install gunicorn
+    apt:
+      name: gunicorn3
+
+  - name: Install flask
+    pip:
+      name: flask
+
+  - name: Install psycopg2-binary python package
+    pip:
+      name: psycopg2-binary
+
+  - name: Create a directory templates
+    file:
+      path: /home/ubuntu/templates
+      state: directory
+      mode: '0755'
+
+  - name: copy file app.py
+    copy:
+      src: /home/pk/ansible/app.py
+      dest: /home/ubuntu/
+
+  - name: copy file index.html
+    copy:
+      src: /home/pk/ansible/index.html
+      dest: /home/ubuntu/templates
+
+##  - name: executing the command run gunicorn
+#    shell: gunicorn --bind 192.168.6.5:5000 app:app
+#    args:
+#      chdir: /home/ubuntu/
+
+  - name: copy file app.service
+    copy:
+      src: /home/pk/ansible/app.service
+      dest: /etc/systemd/system/
+
+  - name: Restart service app.service
+    service:
+      name: app.service
+      state: started

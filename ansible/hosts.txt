@@ -1,0 +1,5 @@
+[servers]
+public_web   ansible_host=<insert public ip>
+private_web  ansible_host=192.168.6.5
+db           ansible_host=192.168.7.5
+

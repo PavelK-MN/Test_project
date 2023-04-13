@@ -1,0 +1,4 @@
+
+---
+ansible_ssh_common_args:  '-o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q ubuntu@<insert public ip>"'
+ansible_ssh_user:         ubuntu
