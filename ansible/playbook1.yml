@@ -5,16 +5,6 @@
   become: yes
 
   tasks:
-  - name: copy file
-    copy:
-      src: ~/.ssh/config
-      dest: /home/ubuntu/.ssh/
-
-  - name: copy file
-    copy:
-      src: ~/.ssh/<private_key_name>
-      dest: /home/ubuntu/.ssh
-
   - name: update repository cache
     apt:
       update_cache: yes
