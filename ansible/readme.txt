@@ -18,7 +18,6 @@ Put file config in ~/.ssh/
 
 Insert your private_key name in the next files: 
 
-~/.ssh/config 
-playbook1.yml
+~/.ssh/config
 
 Put private_key file in ~/.ssh/ directory.
