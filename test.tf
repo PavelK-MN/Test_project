@@ -7,7 +7,7 @@ resource "aws_vpc" "main_net" {
   cidr_block = "192.168.0.0/16"
 
   tags = {
-    name = "Main"
+    Name = "Main"
   }
 }
 
@@ -16,7 +16,7 @@ resource "aws_route_table" "main_rt" {
   vpc_id = aws_vpc.main_net.id
 
   tags = {
-    "Name" = "main_rt"
+    Name = "main_rt"
   }  
 }
 
@@ -40,7 +40,7 @@ resource "aws_internet_gateway" "main_inet_gw" {
   vpc_id = aws_vpc.main_net.id
 
   tags = {
-    "Name" = "main_inet_gw"
+    Name = "main_inet_gw"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_subnet" "public_net" {
   map_public_ip_on_launch = true
 
   tags = {
-    name = "Public_net"
+    Name = "Public_net"
   }
 }
 
@@ -68,7 +68,7 @@ resource "aws_subnet" "private_net" {
   cidr_block = "192.168.6.0/24"
 
   tags = {
-    name = "Privat_net"
+    Name = "Privat_net"
   }
 }
 
@@ -78,7 +78,7 @@ resource "aws_subnet" "db_net" {
   cidr_block = "192.168.7.0/24"
 
   tags = {
-    name = "DB_net"
+    Name = "DB_net"
   }
 }
 
@@ -213,7 +213,7 @@ resource "aws_instance" "public_web" {
     }
 
     tags = {
-      name = "Public_web"
+      Name = "Public_web"
     }
 }
 
@@ -227,7 +227,7 @@ resource "aws_instance" "private_web" {
     associate_public_ip_address = true
 
     tags = {
-      name = "Private_web"
+      Name = "Private_web"
     }
 }
 
@@ -241,7 +241,7 @@ resource "aws_instance" "db" {
     associate_public_ip_address = true
 
     tags = {
-      name = "Db"
+      Name = "Db"
     }
 }
 
